@@ -3,7 +3,7 @@ import * as ExpressSession from "express-session";
 import { AUTH_REDIRECT, FRONTEND_URL } from "../config";
 
 import { auth } from "express-openid-connect";
-import { AuthUser } from "../models";
+import { AuthUser } from "../models/auth";
 
 //const db = new UserService();
 

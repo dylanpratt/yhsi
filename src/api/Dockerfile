@@ -1,24 +1,16 @@
-FROM oraclelinux:7-slim
+FROM node:14-alpine3.10
 
-RUN yum upgrade -y && yum install yum-utils
-RUN  yum -y install oracle-release-el7 && \
-     yum-config-manager --enable ol7_oracle_instantclient && \
-     yum -y install oracle-instantclient19.3-basiclite && \
-     rm -rf /var/cache/yum
+RUN mkdir /home/node/app && chown -R node:node /home/node/app
+WORKDIR /home/node/app
+COPY --chown=node:node package*.json ./
+COPY --chown=node:node .env* ./
 
-RUN yum-config-manager --enable *addons
-RUN yum install -y gcc-c++ make libaio
+ENV NODE_ENV=test
+USER node
+RUN npm install && npm cache clean --force --loglevel=error
+COPY --chown=node:node ./ ./
 
-RUN curl -sL https://rpm.nodesource.com/setup_13.x | bash -
-RUN yum install -y nodejs
-RUN npm install -g pm2@latest
+RUN npm run build
+WORKDIR /home/node/app
 
-WORKDIR /usr/src/app
-COPY package.json /usr/src/app/package.json
-RUN npm install
-
-RUN npm install -g nodemon
-COPY ./ ./
-EXPOSE 3000
-
-CMD npm run development
+CMD ["node", "server.js"]
