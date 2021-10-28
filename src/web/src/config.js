@@ -110,6 +110,6 @@ export const sections = [
     //     icon: "mdi-table-large"
     // }
 ];
-export const environment = process.env.NODE_ENV;
-export const apiBaseUrl = process.env.NODE_ENV == "production" ? "" : "https://api.gov.yk.ca/heritage";
+export const environment = process.env.VUE_APP_ENV;
+export const apiBaseUrl = process.env.VUE_APP_ENV == "production" ? "" : process.env.VUE_APP_API_BASE_URL;
 
